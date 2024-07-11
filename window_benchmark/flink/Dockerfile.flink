@@ -1,0 +1,22 @@
+FROM flink:latest
+
+# install python3 and pip3
+RUN apt-get update -y && \
+apt-get install -y python3 python3-pip python3-dev && rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# install PyFlink
+
+# COPY apache-flink*.tar.gz /
+# RUN pip3 install /apache-flink-libraries*.tar.gz && pip3 install /apache-flink*.tar.gz
+
+# install PyFlink
+RUN pip3 install apache-flink
+
+COPY flink-connector-kafka-3.1.0-1.18.jar /opt/flink/
+COPY kafka-clients-3.7.0.jar /opt/flink
+
+# add python script
+USER flink
+RUN mkdir /opt/flink/usrlib
+ADD python_demo.py /opt/flink/usrlib/python_demo.py
